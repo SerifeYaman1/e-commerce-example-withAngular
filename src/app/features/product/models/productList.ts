@@ -11,4 +11,5 @@ export interface ProductItem {
     reorderLevel:    number;
     discontinued:    boolean;
     name:            string;
+    imageUrl:        string;
 }

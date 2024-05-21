@@ -18,40 +18,30 @@ import { error } from 'console';
   ]
 })
 export class ProductCardComponent implements OnInit {
-
-
   @Input() filterByCategoryId: number | null | undefined;
   @Output() viewProduct = new EventEmitter<ProductItem>();
 
   productItems!: ProductItem[];
-  OnViewInformation(item:ProductItem) {
-    this.viewProduct.emit(item);
-  }
-constructor(private productService:ProductService){
+  
+  constructor(private productService:ProductService){}
 
-}
   ngOnInit(): void {
     this.getProductList();
   }
+
   getProductList() {
   this.productService.getList().subscribe({
     next:(productItems) => {
       this.productItems = productItems;
     },
-    error:(error) =>{console.error("there was an error"), error},
-    
+    error:(error) =>{
+      console.error("there was an error"), error
+    },
   });
-  }
+}
 
-  get filterProductList(): ProductItem[] | null {
-    let filteredCategoryList = this.productItems;
-    if (this.filterByCategoryId) {
-      filteredCategoryList = this.productItems.filter(
-        (product) => product.categoryId === this.filterByCategoryId
-      );
-      return filteredCategoryList;
-    } else {
-      return this.productItems;
-    }
+  OnViewInformation(item:ProductItem) {
+    this.viewProduct.emit(item);
   }
 }
+

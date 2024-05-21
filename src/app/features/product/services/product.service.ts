@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import { ProductItem } from '../models/productList';
 import { HttpClient } from '@angular/common/http';
-import { Observable, Subject } from 'rxjs';
-import { ProductDetailComponent } from '../components/product-detail/product-detail.component';
+import { Observable, Subject, map } from 'rxjs';
 import { ProductDetails } from '../models/productDetails';
 import { environment } from '../../../../environments/environment';
-import { subscribe } from 'diagnostics_channel';
+
 
 @Injectable({
   providedIn: 'root'
@@ -27,12 +26,19 @@ export class ProductService {
 //   ];
   
   constructor(private http:HttpClient) { }
-getList(): Observable<ProductItem[]>{
-  const subject = new Subject<ProductItem[]>();
-  this.http.get<ProductItem[]>(this.apiUrl).subscribe();
-  return subject.asObservable();
+  
+  getList(): Observable<ProductItem[]>{
+  return this.http.get<ProductItem[]>(this
+    .apiUrl).pipe(
+    map((data)=>{
+      for(const product of data){
+        product.imageUrl='';
+      }
+      return data;
+    })
+  ); 
 }
 getById(id:number): Observable<ProductDetails>{
-  return this.http.get<ProductDetails>(`${environment}/products/${id}`)
+  return this.http.get<ProductDetails>(`${this.apiUrl}/products/${id}`)
 }
 }

@@ -16,7 +16,9 @@ import { ProductDetails } from '../../models/productDetails';
 })
 export class ProductDetailComponent implements OnInit{
   @Input() productId!: number;
+
   productDetail!: ProductDetails;
+
   constructor(private productService: ProductService ){
 
   }
@@ -26,9 +28,8 @@ export class ProductDetailComponent implements OnInit{
    
   }
   getProductDetail() {
-    const productDetail = this.productService.getById(this.productId);
-    if(productDetail){
-     this.productDetail = productDetail; 
-    }
+    this.productService.getById(this.productId).subscribe((productDetail)=>{
+      this.productDetail = productDetail;
+    });
   }
 }
